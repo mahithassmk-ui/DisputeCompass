@@ -1,0 +1,126 @@
+<section class="studio" aria-labelledby="review-title">
+  <header class="hero">
+    <div>
+      <span class="eyebrow"><span aria-hidden="true">✦</span> DISPUTE NAVIGATOR AI</span>
+      <h2 id="review-title">Evidence review</h2>
+      <p>Compare the buyer’s claim with your records and prepare a response for PayPal.</p>
+    </div>
+    <span class="case">{{ disputeId() }}</span>
+  </header>
+
+  <div class="workspace">
+    <fieldset [disabled]="busy()">
+      <div class="step"><span>01</span><h3>Build your case</h3></div>
+      <div class="fields">
+        <div>
+          <label for="buyer-complaint">Buyer complaint <small>Optional</small></label>
+          <textarea #complaint id="buyer-complaint" rows="4" maxlength="4000"
+            placeholder="Paste the buyer’s wording if PayPal did not return it."></textarea>
+        </div>
+        <div>
+          <label for="merchant-notes">Order details or merchant notes <small>Optional</small></label>
+          <textarea #notes id="merchant-notes" rows="4" maxlength="4000"
+            placeholder="Add context, such as the product description or fulfillment details."></textarea>
+        </div>
+      </div>
+
+      <div class="upload">
+        <span class="upload-icon" aria-hidden="true">↑</span>
+        <div><strong>Supporting evidence</strong>
+          <p>PDF, PNG, JPEG, TXT or CSV · Up to 5 files, 5 MB each</p>
+          <p>Upload scanned PDF pages as images.</p>
+        </div>
+        <label class="picker">
+          Browse files
+          <input type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.txt,.csv"
+            (change)="addFiles($event)" aria-label="Browse supporting evidence files">
+        </label>
+      </div>
+
+      @if (files().length) {
+        <ul class="file-list">
+          @for (file of files(); track $index) {
+            <li><span>{{ file.name }}</span>
+              <button type="button" class="secondary" (click)="removeFile($index)"
+                [attr.aria-label]="'Remove ' + file.name">Remove</button>
+            </li>
+          }
+        </ul>
+      }
+
+      <div class="actions">
+        <span>{{ files().length }} / 5 files selected</span>
+        <button type="button" class="primary" (click)="analyze(complaint.value, notes.value)">
+          @if (busy()) { <span class="spinner" aria-hidden="true"></span> Reviewing… }
+          @else { <span aria-hidden="true">✦</span> Analyze evidence }
+        </button>
+      </div>
+    </fieldset>
+
+    @if (busy()) { <p class="notice" role="status">Reviewing your case and evidence. This can take a moment.</p> }
+    @if (error()) { <p class="notice error" role="alert">{{ error() }}</p> }
+
+    @if (result(); as review) {
+      <div class="results">
+        <div class="step"><span>02</span><h3>Review the findings</h3></div>
+        <article class="card claim">
+          <h4>Buyer’s claim</h4>
+          <p><ng-container [ngTemplateOutlet]="formatted" [ngTemplateOutletContext]="{ $implicit: review.complaintSummary }"></ng-container></p>
+        </article>
+
+        <div class="cards">
+          <article class="card">
+            <h4>Evidence checklist</h4>
+            <ng-container [ngTemplateOutlet]="items" [ngTemplateOutletContext]="{ $implicit: review.checklist }"></ng-container>
+          </article>
+          <article class="card">
+            <h4>What the evidence shows</h4>
+            @if (!review.findings.length) { <p>No findings were identified in this review.</p> }
+            <ng-container [ngTemplateOutlet]="items" [ngTemplateOutletContext]="{ $implicit: review.findings }"></ng-container>
+          </article>
+          <article class="card gaps">
+            <h4>Evidence gaps and contradictions</h4>
+            @if (!review.gaps.length) { <p>AI flagged no gaps. Verify the findings before using the draft.</p> }
+            <ng-container [ngTemplateOutlet]="items" [ngTemplateOutletContext]="{ $implicit: review.gaps }"></ng-container>
+          </article>
+        </div>
+
+        @if (review.inputNotes.length) {
+          <details class="notice">
+            <summary>What was available to review</summary>
+            <ng-container [ngTemplateOutlet]="items" [ngTemplateOutletContext]="{ $implicit: review.inputNotes }"></ng-container>
+          </details>
+        }
+
+        <div class="draft">
+          <div class="step"><span>03</span><h3>Prepare your response</h3></div>
+          <label for="response-draft">Editable response draft</label>
+          <textarea id="response-draft" rows="9" [value]="draft()"
+            (input)="draft.set($any($event.target).value); copyStatus.set('')"></textarea>
+          <div class="actions">
+            <span role="status">{{ copyStatus() }}</span>
+            <button type="button" class="primary" [disabled]="!draft().trim()" (click)="copyDraft()">Copy draft</button>
+          </div>
+          <p>Verify the facts and placeholders before submitting through PayPal. AI guidance does not guarantee an outcome.</p>
+        </div>
+      </div>
+    }
+  </div>
+</section>
+
+<ng-template #items let-values>
+  @if (values.length) {
+    <ul class="review-list">
+      @for (item of values; track $index) {
+        <li><ng-container [ngTemplateOutlet]="formatted" [ngTemplateOutletContext]="{ $implicit: item }"></ng-container></li>
+      }
+    </ul>
+  }
+</ng-template>
+
+<ng-template #formatted let-value>
+  @for (part of value.split('**'); track $index; let i = $index) {
+    @if (i % 2 === 1 && i < value.split('**').length - 1) { <strong>{{ part }}</strong> }
+    @else { {{ part }} }
+  }
+</ng-template>

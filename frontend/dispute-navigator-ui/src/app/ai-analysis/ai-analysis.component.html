@@ -1,0 +1,97 @@
+
+<div class="ai-analysis-container">
+
+  <div class="ai-header">
+    <div>
+      <h2>AI Dispute Analysis</h2>
+      <p>Understand your dispute and identify the evidence you need.</p>
+    </div>
+    <span class="ai-badge">Powered by AI</span>
+  </div>
+
+  <div class="ai-form">
+
+    <div class="form-group">
+      <label for="disputeReason">Dispute Reason *</label>
+      <select id="disputeReason" [(ngModel)]="disputeReason">
+        <option value="">Select a dispute reason</option>
+        <option value="Item not received">Item not received</option>
+        <option value="Item not as described">Item not as described</option>
+        <option value="Unauthorized transaction">Unauthorized transaction</option>
+        <option value="Duplicate transaction">Duplicate transaction</option>
+        <option value="Refund not processed">Refund not processed</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="transactionDescription">Transaction Description *</label>
+      <textarea
+        id="transactionDescription"
+        [(ngModel)]="transactionDescription"
+        rows="4"
+        placeholder="Describe the transaction, item, purchase date, amount and shipping details...">
+      </textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="merchantExplanation">Merchant Explanation</label>
+      <textarea
+        id="merchantExplanation"
+        [(ngModel)]="merchantExplanation"
+        rows="4"
+        placeholder="Explain your side of the dispute. Include any communication or evidence you currently have...">
+      </textarea>
+    </div>
+
+    <div class="form-actions">
+      <button
+        type="button"
+        class="analyze-button"
+        (click)="analyze()"
+        [disabled]="loading">
+
+        <span *ngIf="!loading">Analyse Dispute</span>
+        <span *ngIf="loading">Analysing...</span>
+      </button>
+
+      <button
+        type="button"
+        class="reset-button"
+        (click)="reset()"
+        [disabled]="loading">
+        Reset
+      </button>
+    </div>
+
+    <div class="loading-message" *ngIf="loading">
+      <p>Our AI is reviewing your dispute. This may take a little time.</p>
+    </div>
+
+    <div class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+  </div>
+
+  <div class="analysis-result" *ngIf="analysis">
+
+    <div class="result-header">
+      <div>
+        <h3>Dispute Analysis</h3>
+        <span>AI-generated guidance</span>
+      </div>
+      <span class="result-status">Analysis Complete</span>
+    </div>
+
+    <div class="result-content">{{ analysis }}</div>
+
+    <p class="result-disclaimer">
+      AI-generated guidance only. Review all facts and verify
+      the applicable PayPal requirements and deadlines before
+      submitting any response or evidence.
+    </p>
+
+  </div>
+
+</div>

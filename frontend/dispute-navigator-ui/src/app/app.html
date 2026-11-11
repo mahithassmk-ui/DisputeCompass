@@ -1,0 +1,927 @@
+
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="brand">
+      <div class="brand-mark">D</div>
+      <div>
+        <h2>dispute<span>navigator</span></h2>
+        <small>INTELLIGENCE PLATFORM</small>
+      </div>
+    </div>
+
+    <div class="workspace-label">WORKSPACE</div>
+
+    <nav class="nav-menu">
+
+      <a class="nav-link"
+         [class.active]="activeSection === 'overview'"
+         href="javascript:void(0)"
+         (click)="setSection('overview')">
+        <span class="nav-icon">◫</span>
+        Overview
+        <span class="nav-indicator"></span>
+      </a>
+
+      <a class="nav-link"
+         [class.active]="activeSection === 'disputes'"
+         href="javascript:void(0)"
+         (click)="setSection('disputes')">
+        <span class="nav-icon">▤</span>
+        Disputes
+        <span class="nav-count">{{ disputes.length }}</span>
+      </a>
+
+      <a class="nav-link"
+         [class.active]="activeSection === 'evidence'"
+         href="javascript:void(0)"
+         (click)="setSection('evidence')">
+        <span class="nav-icon">✧</span>
+        Evidence Studio
+      </a>
+
+      <a class="nav-link"
+         [class.active]="activeSection === 'timeline'"
+         href="javascript:void(0)"
+         (click)="setSection('timeline')">
+        <span class="nav-icon">◷</span>
+        Timeline
+      </a>
+
+      <a class="nav-link"
+         [class.active]="activeSection === 'ai-assistant'"
+         href="javascript:void(0)"
+         (click)="setSection('ai-assistant')">
+        <span class="nav-icon">✦</span>
+        AI Assistant
+        <span class="nav-indicator"></span>
+      </a>
+
+    </nav>
+
+    <!-- SIDEBAR PROFILE -->
+    <div class="sidebar-bottom">
+      <div class="profile">
+        <div class="avatar">M</div>
+
+        <div class="profile-info">
+          <strong>Merchant Workspace</strong>
+          <small>PayPal Sandbox</small>
+        </div>
+
+        <span class="profile-menu">···</span>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+
+      <div class="breadcrumb">
+        Workspace
+        <span>/</span>
+        <strong>
+          {{
+            activeSection === 'overview' ? 'Overview' :
+            activeSection === 'disputes' ? 'Disputes' :
+            activeSection === 'evidence' ? 'Evidence Studio' :
+            activeSection === 'timeline' ? 'Timeline' :
+            'AI Assistant'
+          }}
+        </strong>
+      </div>
+
+      <div class="topbar-actions">
+
+        <div id="lippButton"></div>
+
+        <div class="sandbox-pill">
+          <span></span> SANDBOX ENVIRONMENT
+        </div>
+
+        <button
+          class="icon-button"
+          type="button"
+          (click)="loadDisputes()"
+          title="Refresh disputes">
+          ↻
+        </button>
+
+        <div class="top-avatar">M</div>
+
+      </div>
+
+    </header>
+
+    <!-- ================================================= -->
+    <!-- OVERVIEW PAGE -->
+    <!-- ================================================= -->
+
+    <section class="page-content"
+             *ngIf="activeSection === 'overview'">
+
+      <div class="welcome-row">
+
+        <div>
+          <div class="eyebrow">PAYPAL DISPUTE PREPARATION</div>
+          <h1>Dispute <span>workbench.</span></h1>
+
+          <p class="welcome-subtitle">
+            Review PayPal cases and prepare evidence-backed responses.
+          </p>
+        </div>
+
+        <div class="date-card">
+          <span class="date-icon">◷</span>
+
+          <div>
+            <small>LAST SYNC</small>
+            <strong>{{ lastUpdated | date:'MMM d, h:mm a' }}</strong>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- HERO -->
+      <section class="hero-card">
+
+        <div class="hero-glow"></div>
+
+        <div class="hero-content">
+
+          <div class="hero-label">
+            <span class="sparkle">✦</span>
+            BUILT FOR PAYPAL MERCHANTS
+          </div>
+
+          <h2>
+            Find the evidence gap.<br>
+            <span>Draft your response.</span>
+          </h2>
+
+          <p>
+            Compare the buyer’s complaint with your records. See what each file supports,
+            what’s missing, and what you can say in your response.
+          </p>
+
+          <div class="hero-features">
+            <span>01 · Read the claim</span>
+            <span>02 · Review evidence</span>
+            <span>03 · Edit the draft</span>
+          </div>
+
+          <button
+            class="page-action-button"
+            type="button"
+            (click)="setSection('evidence')">
+            Open Evidence Studio →
+          </button>
+
+        </div>
+
+        <div class="hero-art">
+          <div class="orbit orbit-one"></div>
+          <div class="orbit orbit-two"></div>
+          <div class="orbit-core"><span>✦</span></div>
+          <div class="orbit-node node-one">AI</div>
+          <div class="orbit-node node-two">↗</div>
+          <div class="orbit-node node-three">✓</div>
+        </div>
+
+      </section>
+
+      <!-- METRICS -->
+      <div class="section-heading">
+
+        <div>
+          <h2>Dispute overview</h2>
+          <p>Your account activity at a glance</p>
+        </div>
+
+        <span class="live-indicator">
+          <span></span> LIVE DATA
+        </span>
+
+      </div>
+
+      <section class="stats-grid">
+
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon purple">▤</div>
+            <span class="stat-tag">ALL CASES</span>
+          </div>
+          <div class="stat-value">{{ disputes.length }}</div>
+          <div class="stat-label">Total disputes</div>
+          <div class="stat-footer">Retrieved from PayPal</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon orange">◷</div>
+            <span class="stat-tag">NEEDS ATTENTION</span>
+          </div>
+          <div class="stat-value">{{ openDisputes }}</div>
+          <div class="stat-label">Open disputes</div>
+          <div class="stat-footer">Awaiting resolution</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon green">✓</div>
+            <span class="stat-tag">COMPLETED</span>
+          </div>
+          <div class="stat-value">{{ resolvedDisputes }}</div>
+          <div class="stat-label">Resolved disputes</div>
+          <div class="stat-footer">Closed cases</div>
+        </div>
+
+        <div class="stat-card ai-stat">
+          <div class="stat-top">
+            <div class="stat-icon blue">✧</div>
+            <span class="stat-tag">INTELLIGENCE</span>
+          </div>
+          <div class="stat-value">AI</div>
+          <div class="stat-label">Dispute assistant</div>
+          <div class="stat-footer">AI analysis available</div>
+        </div>
+
+      </section>
+
+      <!-- RECENT DISPUTES AND AI PANEL -->
+      <section class="content-grid">
+
+        <div class="panel disputes-panel">
+
+          <div class="panel-heading">
+            <div>
+              <h2>Priority disputes</h2>
+              <p>Seller responses first, then by available deadlines</p>
+            </div>
+
+            <button
+              class="text-action"
+              type="button"
+              (click)="setSection('disputes')">
+              View all →
+            </button>
+          </div>
+
+          <div *ngIf="loading" class="message-state">
+            <div class="loader"></div>
+            <strong>Synchronising your disputes</strong>
+            <p>Connecting to your PayPal account...</p>
+          </div>
+
+          <div *ngIf="errorMessage" class="message-state error-state">
+            <strong>Unable to load disputes</strong>
+            <p>{{ errorMessage }}</p>
+            <button class="retry-button" (click)="loadDisputes()">
+              Try again
+            </button>
+          </div>
+
+          <div
+            *ngIf="!loading && !errorMessage && disputes.length === 0"
+            class="empty-state">
+
+            <div class="empty-illustration">
+              <div class="empty-circle"><span>✓</span></div>
+              <div class="empty-spark spark-a">✦</div>
+              <div class="empty-spark spark-b">✧</div>
+            </div>
+
+            <h3>You're all caught up!</h3>
+
+            <p>
+              No disputes were found in your PayPal Sandbox account.
+              When a new case arrives, it will appear here.
+            </p>
+
+            <div class="empty-footer">
+              <span class="success-dot"></span>
+              PayPal connection active
+            </div>
+
+          </div>
+
+          <div
+            *ngIf="!loading && !errorMessage && disputes.length > 0"
+            class="dispute-list">
+
+            <div class="dispute-row"
+                 *ngFor="let dispute of disputes.slice(0, 4)"
+                 (click)="setSection('disputes'); loadDisputeDetails(dispute.dispute_id)"
+                 style="cursor: pointer;">
+
+              <div class="case-symbol">▤</div>
+
+              <div class="case-details">
+                <strong>{{ dispute.dispute_id }}</strong>
+                <small>{{ dispute.reason || 'Reason not provided' }}</small>
+              </div>
+
+              <span class="case-status">
+                {{ dispute.status || 'Unknown' }}
+              </span>
+
+              <div class="case-amount">
+                <strong>
+                  {{ dispute.dispute_amount?.value || '—' }}
+                  {{ dispute.dispute_amount?.currency_code || '' }}
+                </strong>
+                <small>Disputed amount</small>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <aside class="panel assistant-panel">
+
+          <div class="assistant-heading">
+            <div class="assistant-icon">✦</div>
+            <div>
+              <h2>Navigator AI</h2>
+              <p>Example walkthrough</p>
+            </div>
+          </div>
+
+          <div class="assistant-visual">
+            <div class="assistant-ring ring-one"></div>
+            <div class="assistant-ring ring-two"></div>
+            <div class="assistant-center">✦</div>
+          </div>
+
+          <div class="assistant-copy">
+            <span class="coming-label">ILLUSTRATIVE CASE</span>
+            <h3>“The shoes didn’t match the listing.”</h3>
+            <p>
+              A delivery receipt supports that the package arrived. The listing and product photos help address the quality complaint.
+            </p>
+          </div>
+
+          <div class="assistant-capabilities">
+            <div><span>01</span> Claim · Product quality differs from listing</div>
+            <div><span>02</span> Gap · Original listing and item photos</div>
+            <div><span>03</span> Next step · Compare records before responding</div>
+          </div>
+
+          <button
+            class="page-action-button"
+            type="button"
+            (click)="setSection('evidence')">
+            Review a PayPal case →
+          </button>
+
+          <div class="assistant-disclaimer">
+            AI suggestions are for review. You remain in control
+            of every submission.
+          </div>
+
+        </aside>
+
+      </section>
+
+    </section>
+
+    <!-- ================================================= -->
+    <!-- DISPUTES PAGE -->
+    <!-- ================================================= -->
+
+    <section class="page-content"
+             *ngIf="activeSection === 'disputes'">
+
+      <div class="welcome-row">
+        <div>
+          <div class="eyebrow">PAYPAL CASE MANAGEMENT</div>
+          <h1>Your <span>Disputes.</span></h1>
+          <p class="welcome-subtitle">
+            Review and monitor disputes retrieved from your PayPal Sandbox account.
+          </p>
+        </div>
+
+        <button
+          class="page-action-button"
+          type="button"
+          (click)="loadDisputes()"
+          [disabled]="loading">
+          ↻ Refresh disputes
+        </button>
+      </div>
+
+      <section class="stats-grid">
+
+        <div class="stat-card">
+          <div class="stat-icon purple">▤</div>
+          <div class="stat-value">{{ disputes.length }}</div>
+          <div class="stat-label">Total disputes</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon orange">◷</div>
+          <div class="stat-value">{{ openDisputes }}</div>
+          <div class="stat-label">Open disputes</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon green">✓</div>
+          <div class="stat-value">{{ resolvedDisputes }}</div>
+          <div class="stat-label">Resolved disputes</div>
+        </div>
+
+      </section>
+
+      <!-- ALL DISPUTES TABLE -->
+      <section class="panel page-panel">
+
+        <div class="panel-heading">
+          <div>
+            <h2>All disputes</h2>
+            <p>Your PayPal Sandbox dispute records</p>
+          </div>
+          <span class="case-count">{{ disputes.length }} CASES</span>
+        </div>
+
+        <div *ngIf="loading" class="message-state">
+          <div class="loader"></div>
+          <strong>Loading disputes...</strong>
+          <p>Retrieving your PayPal case information.</p>
+        </div>
+
+        <div *ngIf="errorMessage" class="message-state error-state">
+          <strong>Unable to load disputes</strong>
+          <p>{{ errorMessage }}</p>
+          <button class="retry-button" (click)="loadDisputes()">
+            Try again
+          </button>
+        </div>
+
+        <div
+          *ngIf="!loading && !errorMessage && disputes.length === 0"
+          class="empty-state">
+
+          <div class="empty-illustration">
+            <div class="empty-circle"><span>✓</span></div>
+          </div>
+
+          <h3>No disputes available</h3>
+          <p>
+            Your PayPal Sandbox account currently has no disputes.
+            New cases will appear here when available.
+          </p>
+
+        </div>
+
+        <div
+          *ngIf="!loading && !errorMessage && disputes.length > 0"
+          class="table-responsive">
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Dispute ID</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Amount</th>
+                <th>Created</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr
+                *ngFor="let dispute of disputes"
+                (click)="loadDisputeDetails(dispute.dispute_id)"
+                style="cursor: pointer;">
+
+                <td>
+                  <strong>{{ dispute.dispute_id }}</strong>
+                </td>
+
+                <td>{{ dispute.reason || 'Not provided' }}</td>
+
+                <td>
+                  <span class="case-status">
+                    {{ dispute.status || 'Unknown' }}
+                  </span>
+                </td>
+
+                <td>
+                  {{ dispute.dispute_amount?.value || '—' }}
+                  {{ dispute.dispute_amount?.currency_code || '' }}
+                </td>
+
+                <td>
+                  {{ dispute.create_time ? (dispute.create_time | date:'MMM d, y') : '—' }}
+                </td>
+
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+
+      </section>
+
+      <!-- SELECTED DISPUTE DETAILS -->
+      <section
+        class="panel page-panel"
+        *ngIf="selectedDispute || selectedDisputeLoading || selectedDisputeError">
+
+        <div class="panel-heading">
+          <div>
+            <h2>Dispute Details</h2>
+            <p>Complete information retrieved from PayPal</p>
+          </div>
+        </div>
+
+        <div *ngIf="selectedDisputeLoading" class="message-state">
+          <div class="loader"></div>
+          <strong>Loading dispute details...</strong>
+        </div>
+
+        <div *ngIf="selectedDisputeError" class="message-state error-state">
+          <strong>Unable to load dispute details</strong>
+          <p>{{ selectedDisputeError }}</p>
+        </div>
+
+        <div *ngIf="selectedDispute" class="dispute-details">
+
+          <h3>{{ selectedDispute.dispute_id }}</h3>
+
+          <!-- DISPUTE SUMMARY -->
+          <section class="stats-grid">
+
+            <div class="stat-card">
+              <div class="stat-label">Dispute amount</div>
+              <div class="stat-value">
+                {{ selectedDispute.dispute_amount?.value }}
+                {{ selectedDispute.dispute_amount?.currency_code }}
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-label">Status</div>
+              <div class="stat-value">
+                {{ selectedDispute.status }}
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-label">Lifecycle stage</div>
+              <div class="stat-value">
+                {{ selectedDispute.dispute_life_cycle_stage }}
+              </div>
+            </div>
+
+          </section>
+
+          <!-- DISPUTE INFORMATION -->
+          <div class="section-heading">
+            <div>
+              <h2>Dispute information</h2>
+            </div>
+          </div>
+
+          <p>
+            <strong>Reason:</strong>
+            {{ selectedDispute.reason }}
+          </p>
+
+          <p>
+            <strong>Dispute state:</strong>
+            {{ selectedDispute.dispute_state }}
+          </p>
+
+          <p>
+            <strong>Seller response deadline:</strong>
+            {{ selectedDispute.seller_response_due_date | date:'MMM d, y, h:mm a' }}
+          </p>
+
+          <!-- TRANSACTION DETAILS -->
+          <div class="section-heading">
+            <div>
+              <h2>Transaction details</h2>
+            </div>
+          </div>
+
+          <div *ngFor="let transaction of selectedDispute.disputed_transactions">
+
+            <p>
+              <strong>Buyer transaction ID:</strong>
+              {{ transaction.buyer_transaction_id }}
+            </p>
+
+            <p>
+              <strong>Item:</strong>
+              {{ transaction.items?.[0]?.item_name || 'Not provided' }}
+            </p>
+
+            <p>
+              <strong>Quantity:</strong>
+              {{ transaction.items?.[0]?.item_quantity || 'Not provided' }}
+            </p>
+
+            <p>
+              <strong>Transaction amount:</strong>
+              {{ transaction.gross_amount?.value }}
+              {{ transaction.gross_amount?.currency_code }}
+            </p>
+
+            <p>
+              <strong>Seller protection eligible:</strong>
+              {{ transaction.seller_protection_eligible ? 'Yes' : 'No' }}
+            </p>
+
+            <p>
+              <strong>Seller protection type:</strong>
+              {{ transaction.seller_protection_type || 'Not provided' }}
+            </p>
+
+          </div>
+
+          <!-- BUYER COMPLAINT -->
+          <div class="section-heading">
+            <div>
+              <h2>Buyer's complaint</h2>
+            </div>
+          </div>
+
+          <div *ngFor="let message of selectedDispute.messages">
+
+            <p>{{ message.content }}</p>
+
+            <small>
+              Submitted by {{ message.posted_by }}
+              on {{ message.time_posted | date:'MMM d, y, h:mm a' }}
+            </small>
+
+          </div>
+
+          <!-- EVIDENCE HISTORY -->
+          <div class="section-heading">
+            <div>
+              <h2>Evidence history</h2>
+            </div>
+          </div>
+
+          <div *ngFor="let evidence of selectedDispute.evidences">
+
+            <p>
+              <strong>Type:</strong>
+              {{ evidence.evidence_type }}
+            </p>
+
+            <p>
+              <strong>Source:</strong>
+              {{ evidence.source }}
+            </p>
+
+            <p>
+              <strong>Notes:</strong>
+              {{ evidence.notes }}
+            </p>
+
+            <p>
+              <strong>Date:</strong>
+              {{ evidence.date | date:'MMM d, y, h:mm a' }}
+            </p>
+
+          </div>
+
+          <button class="page-action-button" type="button"
+            (click)="openEvidenceStudio(selectedDispute.dispute_id)">
+            Open in Evidence Studio →
+          </button>
+
+          <!-- CLOSE DETAILS -->
+          <button
+            type="button"
+            class="page-action-button"
+            (click)="closeDisputeDetails()">
+            Close details
+          </button>
+
+        </div>
+
+      </section>
+
+    </section>
+
+    <!-- ================================================= -->
+    <!-- EVIDENCE STUDIO PAGE -->
+    <!-- ================================================= -->
+
+    <section class="page-content"
+             *ngIf="activeSection === 'evidence'">
+
+      <div class="welcome-row">
+        <div>
+          <div class="eyebrow">CASE PREPARATION</div>
+          <h1>Evidence <span>Studio.</span></h1>
+          <p class="welcome-subtitle">
+            Choose a case to compare the claim with your evidence and draft a response for review.
+          </p>
+        </div>
+      </div>
+
+      <section class="panel page-panel studio-case-picker">
+        <label for="studio-case">PayPal dispute</label>
+        <select id="studio-case" [value]="evidenceDisputeId"
+          (change)="evidenceDisputeId = $any($event.target).value">
+          <option value="">Choose a case</option>
+          @for (dispute of disputes; track dispute.dispute_id) {
+            <option [value]="dispute.dispute_id" [selected]="dispute.dispute_id === evidenceDisputeId">
+              {{ dispute.dispute_id }} · {{ dispute.reason || 'Reason unavailable' }}
+            </option>
+          }
+        </select>
+        @if (loading) {
+          <p role="status">Loading PayPal disputes…</p>
+        } @else if (errorMessage) {
+          <p role="alert">{{ errorMessage }}</p>
+          <button class="text-action" type="button" (click)="loadDisputes()">Retry</button>
+        } @else if (!disputes.length) {
+          <p>No PayPal Sandbox disputes are available.</p>
+        }
+      </section>
+
+      @for (caseId of evidenceDisputeId ? [evidenceDisputeId] : []; track caseId) {
+        <app-evidence-review [disputeId]="caseId"></app-evidence-review>
+      }
+    </section>
+
+    <!-- ================================================= -->
+    <!-- TIMELINE PAGE -->
+    <!-- ================================================= -->
+
+    <section class="page-content"
+             *ngIf="activeSection === 'timeline'">
+
+      <div class="welcome-row">
+        <div>
+          <div class="eyebrow">CASE PROGRESS TRACKING</div>
+          <h1>Dispute <span>Timeline.</span></h1>
+          <p class="welcome-subtitle">
+            Review the dates and current statuses available for your PayPal disputes.
+          </p>
+        </div>
+
+        <button
+          class="page-action-button"
+          type="button"
+          (click)="loadDisputes()"
+          [disabled]="loading">
+          ↻ Refresh timeline
+        </button>
+      </div>
+
+      <section class="panel page-panel">
+
+        <div class="panel-heading">
+          <div>
+            <h2>Case checkpoints</h2>
+            <p>See when each case opened, when it was updated, and any response deadline PayPal returned.</p>
+          </div>
+          <span class="case-count">{{ disputes.length }} CASES</span>
+        </div>
+
+        <div *ngIf="loading" class="message-state">
+          <div class="loader"></div>
+          <strong>Loading case activity...</strong>
+        </div>
+
+        <div *ngIf="errorMessage" class="message-state error-state">
+          <strong>Unable to load timeline</strong>
+          <p>{{ errorMessage }}</p>
+        </div>
+
+        <div
+          *ngIf="!loading && !errorMessage && disputes.length === 0"
+          class="empty-state">
+
+          <div class="empty-illustration">
+            <div class="empty-circle"><span>◷</span></div>
+          </div>
+
+          <h3>No case activity yet</h3>
+          <p>
+            When PayPal disputes are available, their returned dates
+            and statuses will be displayed here.
+          </p>
+
+        </div>
+
+        <div
+          *ngIf="!loading && !errorMessage && disputes.length > 0"
+          class="timeline-list">
+
+          <div class="timeline-item"
+               *ngFor="let dispute of disputes">
+
+            <div class="timeline-marker"></div>
+
+            <div class="timeline-card">
+
+              <div class="timeline-card-header">
+                <div>
+                  <span class="timeline-label">PAYPAL DISPUTE</span>
+                  <h3>{{ dispute.dispute_id }}</h3>
+                </div>
+
+                <span class="case-status">
+                  {{ dispute.status || 'Unknown' }}
+                </span>
+              </div>
+
+              <p>
+                {{ dispute.reason || 'Dispute reason not provided' }}
+              </p>
+
+              <div class="timeline-meta">
+
+                <span *ngIf="dispute.create_time">
+                  Created:
+                  {{ dispute.create_time | date:'MMM d, y, h:mm a' }}
+                </span>
+
+                <span *ngIf="dispute.update_time">
+                  Updated:
+                  {{ dispute.update_time | date:'MMM d, y, h:mm a' }}
+                </span>
+
+                <span *ngIf="dispute.seller_response_due_date">
+                  Seller response due:
+                  {{ dispute.seller_response_due_date | date:'MMM d, y, h:mm a' }}
+                </span>
+
+              </div>
+
+              <button *ngIf="dispute.status !== 'RESOLVED'" class="text-action" type="button"
+                (click)="openEvidenceStudio(dispute.dispute_id)">
+                Prepare in Evidence Studio →
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="evidence-notice">
+          <strong>Timeline data note</strong>
+          <p>
+            Checkpoints show the dates available in PayPal’s case list. Open the case for its current details.
+          </p>
+        </div>
+
+      </section>
+
+    </section>
+
+    <!-- ================================================= -->
+    <!-- AI ASSISTANT PAGE -->
+    <!-- ================================================= -->
+
+    <section class="page-content"
+             *ngIf="activeSection === 'ai-assistant'">
+
+      <div class="welcome-row">
+        <div>
+          <div class="eyebrow">INTELLIGENT DISPUTE MANAGEMENT</div>
+          <h1>AI <span>Assistant.</span></h1>
+          <p class="welcome-subtitle">
+            Explore a dispute reason using the details you enter. For a PayPal case with uploaded evidence, open Evidence Studio.
+          </p>
+        </div>
+      </div>
+
+      <app-ai-analysis></app-ai-analysis>
+
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+
+      <span>
+        DISPUTE NAVIGATOR <b>•</b> BUILT FOR PAYPAL AI HACKATHON
+      </span>
+
+      <span>
+        POWERED BY PAYPAL SANDBOX
+        <span class="footer-heart">✦</span>
+      </span>
+
+    </footer>
+
+  </main>
+
+</div>
