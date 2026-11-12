@@ -20,6 +20,44 @@ DisputeCompass helps merchants understand PayPal disputes, identify relevant evi
 | Visual Studio Code | Latest | Code editor | [VS Code Downloads](https://code.visualstudio.com/download) |
 | Apache Maven | Latest stable version | Builds the backend and manages project dependencies | [Maven Downloads](https://maven.apache.org/download.cgi) |
 
+## PayPal Integration
+
+DisputeCompass integrates the PayPal Developer Platform using its free Sandbox environment. This allowed us to test the payment and dispute workflow with test accounts and funds.
+
+### Sandbox Accounts and Test Transaction
+
+1. **Created two Sandbox accounts:** A personal account representing the buyer and a business account representing the merchant.
+
+2. **Completed a test payment:** Logged in to the personal Sandbox account and made a $10 payment to the business Sandbox account, creating a transaction between the buyer and merchant.
+
+3. **Raised a dispute:** From the personal account, selected the completed transaction and raised a dispute with the reason “merchandise or service not as described.”
+
+4. **Verified the merchant’s view:** Logged in to the business Sandbox account and viewed the dispute raised by the personal account. This provided a test dispute for developing and demonstrating DisputeCompass.
+
+### Connecting PayPal to DisputeCompass
+
+The Java Spring Boot backend connects to the PayPal Sandbox using a REST application's client ID and client secret, configured through environment variables. These credentials authenticate requests to PayPal's APIs.
+
+DisputeCompass uses the **PayPal Disputes API** to retrieve the merchant's disputes and fetch the details of a selected dispute. The application uses the returned information to:
+
+- Display disputes and their current statuses.
+- Show the selected dispute's available transaction and complaint details.
+- Display available dispute dates and seller response deadlines.
+- Prioritize disputes awaiting a seller response.
+- Supply dispute context to Evidence Studio for evidence analysis and response drafting.
+
+### PayPal Data and AI Analysis
+
+After the merchant selects a dispute, its details provide context for analysis alongside merchant notes and uploaded evidence. Ollama running Gemma 3 4B helps explain the complaint, assess supporting evidence, identify missing information, and prepare an editable response draft.
+
+The merchant reviews the generated draft before using it. DisputeCompass supports response preparation; it does not automatically submit the generated response to PayPal.
+
+## Ollama AI Integration
+
+DisputeCompass uses Ollama to run the Gemma 3 4B model (`gemma3:4b`) locally. The Spring Boot backend sends dispute information, merchant notes, and supporting evidence to the model for analysis.
+
+The model explains the buyer’s complaint, assesses relevant evidence, highlights missing information, and generates an editable response draft. It also powers the AI Assistant, which helps merchants understand disputes and identify evidence to gather. Merchants review and edit generated responses before using them.
+
 # Commands to Run the Application
 
 # Running the Dispute Navigator Application
