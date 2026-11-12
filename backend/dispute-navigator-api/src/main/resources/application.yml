@@ -1,0 +1,23 @@
+server:
+  port: 8080
+
+spring:
+  mvc:
+    problemdetails:
+      enabled: true
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 26MB
+  application:
+    name: dispute-navigator-api
+
+paypal:
+  base-url: ${PAYPAL_BASE_URL:https://api-m.sandbox.paypal.com}
+  client-id: ${PAYPAL_CLIENT_ID}
+  client-secret: ${PAYPAL_CLIENT_SECRET}
+
+ollama:
+  base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+  model: llama3.2
+  evidence-model: ${OLLAMA_EVIDENCE_MODEL:gemma3:4b}
