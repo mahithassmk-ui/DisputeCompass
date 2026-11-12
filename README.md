@@ -5,6 +5,9 @@ DisputeCompass helps merchants understand PayPal disputes, identify relevant evi
 - **AI Assistant** explains a dispute based on the reason, transaction details, and merchant’s account of events, then suggests evidence to gather.
 - **Dispute Timeline** displays available dispute dates, statuses, and response deadlines, with a direct path to Evidence Studio.
 
+  <img width="1904" height="934" alt="homepage" src="https://github.com/user-attachments/assets/c0230d57-8b87-4c75-9be4-6cf9939dee2c" />
+
+
 # PreRequisites
 
 | Software / Tool | Version / Requirement | Purpose | Download / Installation |
